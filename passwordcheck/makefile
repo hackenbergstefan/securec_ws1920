@@ -30,11 +30,18 @@
 
 # Target file name (without extension).
 # This is the name of the compiled .hex file.
-TARGET = basic-passwdcheck
+ifeq ($(TARGET),)
+$(error "TARGET is not defined.")
+endif
+
+# Path to ChipWhisperer firmware folder
+ifeq ($(FIRMWAREPATH),)
+$(error "FIRMWAREPATH is not defined.")
+endif
 
 # List C source files here.
 # Header files (.h) are automatically pulled in.
-SRC += basic-passwdcheck.c
+SRC += $(TARGET).c
 
 # -----------------------------------------------------------------------------
 ifeq ($(CRYPTO_OPTIONS),)
