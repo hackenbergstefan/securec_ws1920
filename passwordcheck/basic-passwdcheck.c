@@ -114,13 +114,6 @@ int main(void)
 
 
         if (passbad){
-            //Stop them fancy timing attacks
-            int wait = rand() % 100000; //% 100000 can be removed for xmega
-            for(volatile int i = 0; i < wait; i++){
-                ;
-            }
-            delay_2_ms();
-            delay_2_ms();
             my_puts("PASSWORD FAIL\n");
             led_error(1);
         } else {
@@ -134,5 +127,3 @@ int main(void)
 
   return 1;
   }
-
-
