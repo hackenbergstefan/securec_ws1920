@@ -4,8 +4,12 @@ layout: default
 
 <h1>Secure Implementations on Microcontroller</h1>
 
-<h2>Sites static pages</h2>
-<p>{{ site.static_pages }}</p>
+<h2>Sites static files</h2>
+<p>{{ site.static_files }}</p>
+
+{% for fil in site.static_files %}
+<p>{{ fil.path }}</p>
+{% endfor %}
 
 <h2>Site</h2>
 <p>{{ site }}</p>
