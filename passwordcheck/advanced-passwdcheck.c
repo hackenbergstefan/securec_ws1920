@@ -95,8 +95,7 @@ int main(void)
 
 
         if (passbad){
-            //Stop them fancy timing attacks
-            my_puts("F\n");
+            my_puts("PASSWORD FAIL\n");
         } else {
             my_puts("Access granted, Welcome!\n");
         }
