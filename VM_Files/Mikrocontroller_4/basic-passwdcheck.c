@@ -1,4 +1,4 @@
-‚/*
+/*
     This file is part of the ChipWhisperer Example Targets
     Copyright (C) 2012-2015 NewAE Technology Inc.
 
