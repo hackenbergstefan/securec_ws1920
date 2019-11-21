@@ -5,21 +5,36 @@
 #include "simpleserial.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define PASSWORD_MAX_LENGTH 2
+uint8_t random_buffer[32];
+uint8_t password[8];
 
-uint8_t check_password(uint8_t* x)
+
+uint8_t set_random(uint8_t *x)
 {
-    uint8_t *correct_passwd = x,
-        *attepmt = x + PASSWORD_MAX_LENGTH;
+    memcpy(random_buffer, x, sizeof(random_buffer));
+    return 0;
+}
+
+uint8_t set_password(uint8_t *x)
+{
+    memcpy(password, x, sizeof(password));
+    simpleserial_put('r', sizeof(password), password);
+    return 0;
+}
+
+uint8_t check_password_xor(uint8_t* attempt)
+{
     uint8_t passbad = 0;
 
     trigger_high();
-    for (uint8_t i = 0; i < PASSWORD_MAX_LENGTH; i++)
+    for (uint8_t i = 0; i < sizeof(password); i++)
     {
-        passbad |= correct_passwd[i] ^ attepmt[i];
+        passbad |= password[i] ^ attempt[i];
     }
     trigger_low();
+
     return passbad;
 }
 
@@ -30,7 +45,9 @@ int main(void)
     trigger_setup();
 
     simpleserial_init();
-    simpleserial_addcmd('p', 2 * PASSWORD_MAX_LENGTH, check_password);
+    simpleserial_addcmd('r', sizeof(random_buffer), set_random);
+    simpleserial_addcmd('p', sizeof(password), set_password);
+    simpleserial_addcmd('1', sizeof(password), check_password_xor);
     while(1)
         simpleserial_get();
 }
