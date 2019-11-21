@@ -24,7 +24,7 @@ uint8_t set_password(uint8_t *x)
     return 0;
 }
 
-uint8_t check_password_xor(uint8_t* attempt)
+uint8_t check_password_xor(uint8_t *attempt)
 {
     uint8_t passbad = 0;
 
@@ -34,6 +34,8 @@ uint8_t check_password_xor(uint8_t* attempt)
         passbad |= password[i] ^ attempt[i];
     }
     trigger_low();
+
+    simpleserial_put('r', 1, &passbad);
 
     return passbad;
 }
