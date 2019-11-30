@@ -43,11 +43,6 @@ endif
 # Header files (.h) are automatically pulled in.
 SRC += $(TARGET).c
 
-# -----------------------------------------------------------------------------
-ifeq ($(CRYPTO_OPTIONS),)
-CRYPTO_OPTIONS = AES128C
-endif
-
 SS_VER = SS_VER_1_1
 
 #Add simpleserial project to build

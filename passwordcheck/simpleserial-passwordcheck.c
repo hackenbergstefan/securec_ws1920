@@ -59,17 +59,25 @@ uint8_t check_password_xor_randomstart(uint8_t *attempt)
     return passbad;
 }
 
-uint8_t check_password_xor_randomorder1(uint8_t *attempt)
+uint8_t check_password_xor_randomstart_random_buffer(uint8_t *attempt)
 {
     uint8_t passbad = 0;
+    uint8_t buffer1[sizeof(random_buffer)], buffer2[sizeof(random_buffer)];
 
-    uint8_t rand = random_buffer[0] % sizeof(password);
+    // Copy random input
+    memcpy(buffer1, random_buffer, sizeof(random_buffer));
+    memcpy(buffer2, random_buffer, sizeof(random_buffer));
+    // Copy password and attempt
+    memcpy(buffer1, password, sizeof(password));
+    memcpy(buffer2, attempt, sizeof(password));
+
+    uint8_t j = random_buffer[0] % sizeof(random_buffer);
 
     trigger_high();
-    for (uint8_t i = 0; i < sizeof(password); i++)
+    for (uint8_t i = 0; i < sizeof(random_buffer); i++)
     {
-        uint8_t j = i ^ rand;
-        passbad |= password[j] ^ attempt[j];
+        passbad |= buffer1[j] ^ buffer2[j];
+        j = (j + 1) % sizeof(random_buffer);
     }
     trigger_low();
 
@@ -89,7 +97,7 @@ int main(void)
     simpleserial_addcmd('p', sizeof(password), set_password);
     simpleserial_addcmd('1', sizeof(password), check_password_xor);
     simpleserial_addcmd('2', sizeof(password), check_password_xor_randomstart);
-    simpleserial_addcmd('3', sizeof(password), check_password_xor_randomorder1);
+    simpleserial_addcmd('3', sizeof(password), check_password_xor_randomstart_random_buffer);
     while(1)
         simpleserial_get();
 }
